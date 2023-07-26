@@ -1,0 +1,109 @@
+{% extends "auctions/layout.html" %}
+
+
+{% block body %}
+<style>
+  .wrapper {
+    padding: 5px;
+
+  }
+
+  .menu-button {
+    background-color: transparent;
+    cursor: pointer;
+    color: white;
+    padding: 15px;
+    font-size: 15px;
+    border: 2px solid white;
+  }
+
+  .right-menu {
+    position: relative;
+    display: inline-block;
+
+
+  }
+
+  .dropdown-menu {
+    display: none;
+    position: absolute;
+    background-color: white;
+    min-width: 158px;
+    z-index: 1;
+
+
+  }
+
+  .dropdown-menu a:hover {
+    background-color: gray;
+    color: white;
+
+  }
+
+  .right-menu:hover .dropdown-menu {
+    display: block;
+  }
+
+  .right-menu:hover .menu-button {
+    background-color: transparent;
+  }
+</style>
+<h4 style="text-align: center; color: white; margin-top: 4%;"> Category/{{cat}}</h4>
+
+<div class="wrapper">
+
+  <div class="right-menu">
+    <button class="menu-button">{{cat}}</button>
+    <div class="dropdown-menu row">
+      <a class="nav-link" href="{% url 'catContent' 'All' %}">All</a>
+      {% for category in categories%}
+      <a href="{% url 'catContent' category %}" class="nav-link">{{category}}</a>
+      {%endfor%}
+
+    </div>
+  </div>
+</div>
+
+<div class="row " style=" display: flex; justify-content: center; ">
+
+
+
+  {%for listing in Listings%}
+
+  {% if listing.isActive  %}
+
+  <div class="card" style="width: 18rem; margin: 40px; height: 450px; ">
+
+    <img height="250px" src="{{ listing.imageUrl}}" class="card-img-top" alt="{{listing.Title}} image ">
+    <div class="card-body">
+      <h5 style="text-align: center;" class="card-title">{{listing.Title}}</h5>
+
+
+      <a style="margin-left: 50px; margin-top: 20px;" href="{% url 'Listing' listing.id %}" class="btn btn-primary">View
+        Details</a>
+
+    </div>
+  </div>
+  {% endif %}
+  {% if not listing.isActive %}
+  {% if listing.Price.user == request.user %}
+  <div class="card" style="width: 18rem; margin: 40px; height: 450px; ">
+
+    <img height="250px" src="{{ listing.imageUrl}}" class="card-img-top" alt="{{listing.Title}} image ">
+    <div class="card-body">
+      <h5 style="text-align: center;" class="card-title">{{listing.Title}}</h5>
+
+
+      <a style="margin-left: 50px; margin-top: 20px;" href="{% url 'Listing' listing.id %}" class="btn btn-primary">View
+        Details</a>
+
+    </div>
+  </div>
+  {% endif %}
+  {% endif %}
+
+  {%endfor%}
+
+  
+</div>
+{% endblock %}

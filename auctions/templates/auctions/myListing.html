@@ -1,0 +1,66 @@
+{% extends "auctions/layout.html" %}
+
+{% block body %}
+
+<style>
+table
+  {
+    width: 50%;
+    
+    background-color: white;
+    
+  }
+
+  .table
+  {
+    display: flex;
+    
+    justify-content: center;
+  }
+  h5
+  {
+    color: green;
+  }
+
+</style>
+<h2 style="text-align: center; color: white;  margin-top: 4%;">MyListings</h2>
+<div class="table" >
+    <table>
+        <tr>
+            <th>Item</th>
+            <th>ItemName</th>
+            <th>Buyer</th>
+            <th>Current Bid</th>
+            <th>Control Auction</th>
+        </tr>
+        {%for listing in Listings %}
+
+
+            {%if listing.NumOfBids > 0 %}
+
+                <tr>
+                    <td><img style="width: 60px; height: 60px;"  src="{{listing.imageUrl}}"> </td>
+                    <td>{{listing.Title}}</td>
+                    <td>{{listing.Price.user}}</td>
+                    <td>${{listing.Price.bid}} </td>
+                    <td>
+                    {% if listing.isActive %}
+                        <form action="{% url 'closeAuction' listing.pk %}" method="post">
+                            {%csrf_token%}
+                            <input type="submit" class="btn btn-danger" value="Close Auction">
+                        </form>
+                    {%else%}
+                        <h5 >Auction is closed </h5>
+                    </td>
+                    
+
+                    {% endif %}
+                </tr>
+            {% endif %}
+
+        {%endfor%}
+    </table>
+</div>
+
+
+{% endblock %}

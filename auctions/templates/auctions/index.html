@@ -1,0 +1,59 @@
+{% extends "auctions/layout.html" %}
+
+
+{% block body %}
+<style>
+  .wrapper {
+    padding: 5px;
+
+  }
+
+  
+</style>
+<h4 style="text-align: center; color: white; margin-top: 4%;"> HOME</h4>
+
+
+
+<div class="row " style=" display: flex; justify-content: center; ">
+
+
+
+  {%for listing in Listings%}
+
+  {% if listing.isActive  %}
+
+  <div class="card" style="width: 18rem; margin: 40px; height: 450px; ">
+
+    <img height="250px" src="{{ listing.imageUrl}}" class="card-img-top" alt="{{listing.Title}} image ">
+    <div class="card-body">
+      <h5 style="text-align: center;" class="card-title">{{listing.Title}}</h5>
+
+
+      <a style="margin-left: 50px; margin-top: 20px;" href="{% url 'Listing' listing.id %}" class="btn btn-primary">View
+        Details</a>
+
+    </div>
+  </div>
+  {% endif %}
+  {% if not listing.isActive %}
+  {% if listing.Price.user == request.user %}
+  <div class="card" style="width: 18rem; margin: 40px; height: 450px; ">
+
+    <img height="250px" src="{{ listing.imageUrl}}" class="card-img-top" alt="{{listing.Title}} image ">
+    <div class="card-body">
+      <h5 style="text-align: center;" class="card-title">{{listing.Title}}</h5>
+
+
+      <a style="margin-left: 50px; margin-top: 20px;" href="{% url 'Listing' listing.id %}" class="btn btn-primary">View
+        Details</a>
+
+    </div>
+  </div>
+  {% endif %}
+  {% endif %}
+
+  {%endfor%}
+
+  
+</div>
+{% endblock %}

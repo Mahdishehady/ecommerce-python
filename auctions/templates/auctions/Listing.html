@@ -1,0 +1,198 @@
+{% extends "auctions/layout.html" %}
+
+{% block body %}
+<style>
+    .heart {
+        background-color: gray;
+
+        position: relative;
+        border: none;
+        height: 50px;
+        width: 50px;
+        transform: rotate(-43deg);
+    }
+
+    .heart::after {
+        background-color: inherit;
+        border-radius: 50%;
+        content: '';
+        position: absolute;
+        top: -50%;
+        left: 0;
+        height: 50px;
+        width: 50px;
+    }
+
+    .heart::before {
+        background-color: inherit;
+        border-radius: 50%;
+        content: '';
+        position: absolute;
+        top: 0;
+        right: -50%;
+        height: 50px;
+        width: 50px;
+    }
+
+
+    .heart2 {
+        background-color: red;
+
+        position: relative;
+        border: none;
+        height: 50px;
+        width: 50px;
+        transform: rotate(-43deg);
+    }
+
+    .heart2::after {
+        background-color: inherit;
+        border-radius: 50%;
+        content: '';
+        position: absolute;
+        top: -50%;
+        left: 0;
+        height: 50px;
+        width: 50px;
+    }
+
+    .heart2::before {
+        background-color: inherit;
+        border-radius: 50%;
+        content: '';
+        position: absolute;
+        top: 0;
+        right: -50%;
+        height: 50px;
+        width: 50px;
+    }
+
+    .listing {
+        margin-left: 25%;
+        margin-top: 100px;
+        width: 60%;
+        height: 30%;
+        background-color: white;
+        padding: 20px;
+
+    }
+
+    img {
+        position: relative;
+    }
+</style>
+<div class="listing">
+  
+    {% if user.is_authenticated and Listing.isActive %}
+    <div style="height:60px;">
+    {%if inWatchList%}
+    <form action="{%url 'RemoveWatchListing' id=Listing.id %}" method="post">
+        {%csrf_token%}
+        <button  type="submit" class="heart"></button>
+    </form>
+    {%else%}
+    <form action="{%url 'AddWatchListing' id=Listing.id %}" method="post">
+        {%csrf_token%}
+        <button type="submit" class="heart2"> </button>
+    </form>
+
+    {% endif %}
+</div>
+    {% endif %}
+
+    <br>
+    <div class="row" >
+        <div style="width: 50%; height: 250px; ">
+            <img  height="100%" src="{{Listing.imageUrl}}" width="100%">
+        </div>
+        <div style="width: 50%;">
+
+            <h2 style="text-align: center;"> {{Listing.Title}}</h2>
+            <p>{{Listing.Description}}</p>
+            <h5>Price:${{Listing.Price.bid}}</h5>
+            <h5>Details:</h5>
+            <ul>
+
+                <li><b>Owner</b>:{{Listing.Owner}}</li>
+                <li><b>Email</b>:{{Listing.Owner.email}}</li>
+            </ul>
+
+            <div>
+                {%if message%}
+                   <div class="alert alert-success" role="alert">
+                    <h5>Your bid was sucssesfully added</h5>
+                    </div>
+                {%endif%}
+                {%if  message is False%}
+                 <div class="alert alert-danger" role="alert">
+                    <h5>Please enter a higher bid!!!</h5>
+                  </div>
+                {%endif%}
+            </div> 
+            {%  if user.is_authenticated and not Listing.Owner == request.user and Listing.isActive %}
+            <form action="{% url 'addbid' id=Listing.id%}" method="post">
+                {%csrf_token%}
+                <div>{{Listing.NumOfBids}} bid(s) so far.</div>
+                <div class="input-group mb-3" style="width: 80%;">
+
+                    <input type="number" min="0" name="newbid" class="form-control" placeholder="Bid Here">
+                    <button class="btn btn-primary" type="submit">Place Bid</button>
+                </div>
+            </form>
+
+
+            {%endif%}
+            {% if not Listing.isActive %}
+            {% if Listing.Price.user == request.user %}
+            <h3 style="color: green;">Congrats! You won the auction</h3>
+            
+            {% endif %}
+            {% endif %}
+        </div>
+        <div style="margin-top: 10%";>
+            <form action="{% url 'addComment' id=Listing.id%}" method="post">
+                {%csrf_token%}
+                {% if user.is_authenticated %}
+                <div class="input-group mb-3" style="width:50%">
+                    <input type="text" name="newComment" class="form-control" placeholder="Add comment Here">
+                    <button class="btn btn-outline-secondary" type="submit">comment</button>
+                </div>
+                {%endif%}
+
+
+                <h4>Reviews:</h4>
+
+                {%for comment in allcomments %}
+
+
+                <div class="row-input">
+
+                    <div style="width: 40px;" class="p-row-input">
+                        <div class="left">
+                            <img src="https://secure.gravatar.com/avatar/5623cbce5804e2878c88895fd4eb1cd5?d=identicon&r=PG&s=48"
+                                class="rounded-circle" alt="user image">
+                        </div>
+                    </div>
+                    <div class="right">
+
+                        <p>
+                            {{comment.comment}}
+                            /<i> Posted by <b>{{comment.person}}</b></i>
+                        </p>
+
+
+                    </div>
+
+                </div>
+                {%empty%}
+                <h6>No reviews yet!!</h6>
+
+
+                {%endfor%}
+            </form>
+        </div>
+    </div>
+
+</div>
+</div>
+{% endblock %}

@@ -1,0 +1,60 @@
+body {
+   
+    background-color:gray;
+    
+}
+
+.row-input
+  {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    margin: 0;
+   
+
+  }
+  .left
+  {
+    width: 200px;
+  }
+  .right
+  {
+   width: 415px;
+   padding: 10px;
+   display: flex;
+    flex-direction: row;
+    align-items: center;
+    margin: 0;
+   
+  }
+  .p-row-input
+  {
+    font-size: 13px;
+    vertical-align: middle;
+  }
+
+  
+
+  tr
+  {
+    border-bottom: 1px solid rgb(127, 26, 221);
+    
+    
+  }
+  
+ 
+  .cards
+  {
+    width: 50%;
+  }
+
+ 
+
+ a {
+  color: #635c5c
+}
+
+a:hover {
+  color: #fff
+}
+
